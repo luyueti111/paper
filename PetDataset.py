@@ -6,10 +6,11 @@ import os
 
 
 class PetDataset(data.Dataset):
-    def __init__(self, data_transform=None):
+    def __init__(self, data_transform=None, data_csv=None):
         self.transform = data_transform
         self.file_path = os.getcwd()
-        data_csv = pd.read_csv("petfinder-pawpularity-score/train.csv")
+        if data_csv is None:
+            data_csv = pd.read_csv("petfinder-pawpularity-score/train.csv")
         self.label_df = data_csv
 
     def __getitem__(self, index):
