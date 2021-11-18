@@ -2,6 +2,7 @@ import numpy as np
 import torch.nn as nn
 import torch.optim as optim
 import torch
+import pandas as pd
 
 
 def train_net(net,
@@ -54,3 +55,13 @@ def test_net(net,
             iter_i += 1
 
     return d.cpu().numpy()
+
+
+def balance_df(df):
+    count_df = pd.DataFrame(df.groupby("Pawpularity")["Pawpularity"].agg("count"))
+    max_cnt = count_df["Pawpularity"].max()
+    for i in range(0, 100):
+        cnt = count_df.iloc[i, 0]
+        dif_cnt = max_cnt - cnt
+        df = df.append(df[df["Pawpularity"] == (i + 1)].sample(dif_cnt, replace=True, axis=0))
+    return df
